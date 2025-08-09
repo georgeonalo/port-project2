@@ -6,9 +6,12 @@
 # atlassian_user_token: You can configure the user token on the <a target="_blank" href="https://id.atlassian.com/manage-profile/security/api-tokens">Atlassian account page</a>
 
 on:
-    workflow_dispatch:
-    schedule:
-        - cron: '0 */1 * * *' # Determines the scheduled interval for this workflow. This example runs every hour.
+   push:
+    branches:
+      - main
+    # workflow_dispatch:
+    # schedule:
+    #     - cron: '0 */1 * * *' # Determines the scheduled interval for this workflow. This example runs every hour.
 
 jobs:
     run-integration:
