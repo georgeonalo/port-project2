@@ -1,7 +1,7 @@
 import requests
 
 # Your Port API token (same as before)
-ACCESS_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcmdJZCI6Im9yZ19qNHNJSEFTWEhKZkNnQ3BoIiwiaXNzIjoiaHR0cHM6Ly9hcGkuZ2V0cG9ydC5pbyIsImF1ZCI6Imh0dHBzOi8vYXBpLmdldHBvcnQuaW8iLCJpc01hY2hpbmUiOnRydWUsInN1YiI6InA0akJOdnRyMWpjSHRqT1F5MTI2ZWxWVDl4bGJVNjFvIiwicG9ydF91c2VyX2lkIjoicDRqQk52dHIxamNIdGpPUXkxMjZlbFZUOXhsYlU2MW8iLCJqdGkiOiJlZGI0M2NhOC04NWRmLTRhOGItOWIwYy02MjEwZDNlNDc4NTEiLCJpYXQiOjE3NTQ4ODE4MDQsImV4cCI6MTc1NDg5MjYwNH0.tWSwkDvYbCvmPCtVlXDzExndYuDwxxs3ApRVczF1mzE'
+ACCESS_TOKEN = 'YOUR_PORT_API_TOKEN_HERE'  # Replace with your actual Port API token4MDQsImV4cCI6MTc1NDg5MjYwNH0.tWSwkDvYbCvmPCtVlXDzExndYuDwxxs3ApRVczF1mzE'
 
 API_URL = 'https://api.getport.io/v1'
 blueprint_name = 'githubRepository'
@@ -50,17 +50,17 @@ test_entities = [
             "name": "port-project2",
             "url": "https://github.com/georgeonalo/port-project2",
             "language": "Python",
-            "open_prs_count": 2  # Your actual open PR count - update this number
+            "open_prs_count": 1  # 1 open PR - should get GOLD
         }
     },
     {
-        "identifier": "your-second-repo",
-        "title": "Your Second Repository", 
+        "identifier": "docker-projects",
+        "title": "Docker Projects", 
         "properties": {
-            "name": "your-second-repo-name",  # Replace with your actual repo name
-            "url": "https://github.com/georgeonalo/your-second-repo-name",  # Replace with actual URL
-            "language": "JavaScript",  # Update with actual language
-            "open_prs_count": 0  # Update with actual PR count
+            "name": "docker-projects",
+            "url": "https://github.com/georgeonalo/docker-projects",
+            "language": "Docker",
+            "open_prs_count": 1  # 1 open PR - should get GOLD
         }
     }
 ]

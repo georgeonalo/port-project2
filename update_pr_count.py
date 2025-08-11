@@ -1,7 +1,7 @@
 import requests
 
 # Your Port API token
-ACCESS_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcmdJZCI6Im9yZ19qNHNJSEFTWEhKZkNnQ3BoIiwiaXNzIjoiaHR0cHM6Ly9hcGkuZ2V0cG9ydC5pbyIsImF1ZCI6Imh0dHBzOi8vYXBpLmdldHBvcnQuaW8iLCJpc01hY2hpbmUiOnRydWUsInN1YiI6InA0akJOdnRyMWpjSHRqT1F5MTI2ZWxWVDl4bGJVNjFvIiwicG9ydF91c2VyX2lkIjoicDRqQk52dHIxamNIdGpPUXkxMjZlbFZUOXhsYlU2MW8iLCJqdGkiOiJlN2EyNDgyNC03YjJlLTQxOWItYjQyMC02YjU0NDYxZDU5OGUiLCJpYXQiOjE3NTQ3NTQ1NDEsImV4cCI6MTc1NDc2NTM0MX0.Q1eKZF7LwKTS7K-YiEiNMVsLoQ3fomJiYdEkxiAsR5c'
+ACCESS_TOKEN = 'YOUR_PORT_API_TOKEN_HERE'  # Replace with your actual Port API token1NDEsImV4cCI6MTc1NDc2NTM0MX0.Q1eKZF7LwKTS7K-YiEiNMVsLoQ3fomJiYdEkxiAsR5c'
 
 API_URL = 'https://api.getport.io/v1'
 blueprint_name = 'githubRepository'
@@ -53,7 +53,7 @@ while True:
     print("2. test-repo-silver") 
     print("3. test-repo-bronze")
     print("4. port-project2")
-    print("5. your-second-repo")
+    print("5. docker-projects")
     print("6. Exit")
     
     choice = input("\nSelect entity to update (1-5): ").strip()
@@ -67,7 +67,7 @@ while True:
         '2': 'test-repo-silver',
         '3': 'test-repo-bronze', 
         '4': 'port-project2',
-        '5': 'your-second-repo'
+        '5': 'docker-projects'
     }
     
     if choice in entity_map:
