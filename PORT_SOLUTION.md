@@ -336,6 +336,13 @@ else:
 
 # Exercise #4: Troubleshooting Self-Service Actions with GitHub Workflows
 
+
+![alt text](<Screenshot 2025-09-01 at 06.40.45.png>)
+
+![alt text](<Screenshot 2025-09-01 at 06.41.06.png>)
+
+![alt text](<Screenshot 2025-09-01 at 06.41.22.png>)
+
 **Problem**: Self-service action triggers a GitHub workflow but stays in "IN PROGRESS" status indefinitely, and the workflow is not being triggered.
 
 ### Comprehensive Troubleshooting Guide
