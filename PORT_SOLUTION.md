@@ -118,9 +118,16 @@ This navigation allows you to flexibly extract, transform, and combine data from
 - Create new project: Software Development → Scrum → Company-managed
 - Access Components feature from left sidebar
 
+![alt text](<Screenshot 2025-09-01 at 04.59.21.png>)
+![alt text](<Screenshot 2025-09-01 at 04.53.49.png>)
+
+
+
 #### Port Ocean Integration for Jira
 - Deploy using "Real Time & Always on" or "Scheduled" (not "Hosted by Port")
 - Configure using the provided GitHub Actions workflow
+
+![alt text](<Screenshot 2025-09-01 at 06.15.59.png>)
 
 #### Data Model Configuration
 ```yaml
@@ -170,6 +177,11 @@ jobs:
 -
 --
 
+
+![alt text](<Screenshot 2025-09-01 at 04.42.56.png>)
+
+![alt text](<Screenshot 2025-09-01 at 04.43.40.png>)
+
 ## Exercise #3: Repository Scorecard for Open Pull Requests
 
 **Task**: Create a scorecard that tracks the number of open PRs per repository with Gold (<5 PRs), Silver (<10 PRs), and Bronze (<15 PRs) levels.
@@ -177,6 +189,8 @@ jobs:
 ### Solution:
 
 #### Step 1: Add Open PRs Property to Repository Blueprint
+
+![alt text](<Screenshot 2025-09-01 at 04.59.21-1.png>)
 
 First, we need to add a property to the repository blueprint to track the number of open pull requests:
 
@@ -313,125 +327,13 @@ else:
     print(response.text)
 ```
 
-#### Step 3: Data Population Script
+![alt text](<Screenshot 2025-09-01 at 06.28.34.png>)
 
-To populate the `open_prs_count` property, you can use GitHub's API:
+![alt text](<Screenshot 2025-09-01 at 06.28.03.png>)
+![alt text](<Screenshot 2025-09-01 at 06.27.40.png>)
 
-```python
-import requests
-from github import Github
 
-def get_open_prs_count(repo_owner, repo_name, github_token):
-    """
-    Get the count of open pull requests for a repository
-    """
-    g = Github(github_token)
-    repo = g.get_repo(f"{repo_owner}/{repo_name}")
-    open_prs = repo.get_pulls(state='open')
-    return open_prs.totalCount
 
-def update_repository_entity(repo_identifier, open_prs_count, port_token):
-    """
-    Update the repository entity in Port with the open PRs count
-    """
-    API_URL = 'https://api.getport.io/v1'
-    
-    headers = {
-        'Authorization': f'Bearer {port_token}',
-        'Content-Type': 'application/json'
-    }
-    
-    entity_data = {
-        "properties": {
-            "open_prs_count": open_prs_count
-        }
-    }
-    
-    response = requests.patch(
-        f'{API_URL}/blueprints/repository/entities/{repo_identifier}',
-        json=entity_data,
-        headers=headers
-    )
-    
-    return response.status_code == 200
-
-# Example usage
-github_token = 'your_github_token'
-port_token = 'your_port_token'
-
-# Update for a specific repository
-repo_owner = 'your-org'
-repo_name = 'your-repo'
-repo_identifier = f'{repo_owner}-{repo_name}'
-
-open_prs = get_open_prs_count(repo_owner, repo_name, github_token)
-success = update_repository_entity(repo_identifier, open_prs, port_token)
-
-print(f"Repository {repo_name} has {open_prs} open PRs")
-print(f"Entity update successful: {success}")
-```
-
-#### Step 4: Example Repository Entities
-
-Here are example repository entities with different open PR counts to test the scorecard:
-
-```json
-[
-  {
-    "identifier": "frontend-app",
-    "title": "Frontend Application",
-    "properties": {
-      "name": "frontend-app",
-      "url": "https://github.com/your-org/frontend-app",
-      "language": "TypeScript",
-      "open_prs_count": 3
-    }
-  },
-  {
-    "identifier": "backend-api",
-    "title": "Backend API",
-    "properties": {
-      "name": "backend-api",
-      "url": "https://github.com/your-org/backend-api",
-      "language": "Python",
-      "open_prs_count": 7
-    }
-  },
-  {
-    "identifier": "legacy-service",
-    "title": "Legacy Service",
-    "properties": {
-      "name": "legacy-service",
-      "url": "https://github.com/your-org/legacy-service",
-      "language": "Java",
-      "open_prs_count": 12
-    }
-  }
-]
-```
-
-### Expected Scorecard Results:
-
-- **frontend-app** (3 open PRs): **Gold** level ✅
-- **backend-api** (7 open PRs): **Silver** level ✅  
-- **legacy-service** (12 open PRs): **Bronze** level ✅
-
-### Automation Considerations:
-
-1. **Webhook Integration**: Set up GitHub webhooks to automatically update the `open_prs_count` when PRs are opened/closed
-2. **Scheduled Updates**: Run a daily job to sync PR counts across all repositories
-3. **Real-time Monitoring**: Use GitHub's GraphQL API for more efficient bulk updates
-
-### Scorecard Benefits:
-
-- **Visibility**: Teams can quickly identify repositories with PR backlogs
-- **Process Improvement**: Encourages timely PR reviews and merges
-- **Quality Metrics**: Provides measurable goals for repository maintenance
-- **Team Accountability**: Makes PR management performance transparent
-
-This scorecard implementation provides clear visibility into repository health and encourages teams to maintain manageable PR queues for better development velocity.---
-
-#
 # Exercise #4: Troubleshooting Self-Service Actions with GitHub Workflows
 
 **Problem**: Self-service action triggers a GitHub workflow but stays in "IN PROGRESS" status indefinitely, and the workflow is not being triggered.
