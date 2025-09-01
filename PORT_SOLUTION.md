@@ -907,15 +907,3 @@ python3 update_pr_count.py
 - `k8s-deploy.json` & `issue-response.json` - Source data files
 
 This submission demonstrates practical Port implementation skills, API integration expertise, and systematic problem-solving approach suitable for a Port solutions role.
-
-
-
-
-
-
-
-
-
-
-
-
