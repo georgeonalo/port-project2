@@ -48,3 +48,10 @@ logs/
 # Temporary files
 *.tmp
 *.temp
+*env.groot
+*env.prod.account
+*env.prod.groot
+*env.prod.chain
+*env.prod.media
+*env.prod.wanda
+*env.prod.notification

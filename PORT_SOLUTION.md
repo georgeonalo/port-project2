@@ -12,6 +12,8 @@ jq '.spec.replicas' k8s-deploy.json
 ```
 **Output**: `1`
 
+![alt text](<Screenshot 2025-09-01 at 04.28.33.png>)
+
 **Explanation**: This pattern navigates to the `spec` object and extracts the `replicas` field, which contains the desired number of pod replicas for the deployment.
 
 #### b. Deployment Strategy
@@ -19,6 +21,8 @@ jq '.spec.replicas' k8s-deploy.json
 jq '.spec.strategy.type' k8s-deploy.json
 ```
 **Output**: `"RollingUpdate"`
+
+![alt text](<Screenshot 2025-09-01 at 04.29.03.png>)
 
 **Explanation**: This pattern accesses the deployment strategy configuration within the spec, specifically the `type` field that indicates whether the deployment uses RollingUpdate or Recreate strategy.
 
@@ -28,7 +32,12 @@ jq -r '(.metadata.labels.service + "-" + .metadata.labels.environment)' k8s-depl
 ```
 **Output**: `authorization-production-gcp-1`
 
+![alt text](<Screenshot 2025-09-01 at 04.29.55.png>)
+
 **Explanation**: This pattern extracts two labels from the metadata section and concatenates them with a hyphen. The `-r` flag provides raw output without quotes. The parentheses ensure proper string concatenation order.
+
+
+
 
 ### 2. Jira Subtask Issue IDs Extraction
 
@@ -57,6 +66,8 @@ jq '[.fields.subtasks[].key]' issue-response.json
 ]
 ```
 
+![alt text](<Screenshot 2025-09-01 at 04.31.16.png>)
+
 **Explanation**: 
 - `.fields.subtasks[]` iterates through each subtask object in the subtasks array
 - `.key` extracts the issue identifier from each subtask
@@ -76,6 +87,20 @@ jq -r '.fields.subtasks[].key' issue-response.json
 ```
 
 ---
+
+
+## Understanding the JQ Dot (.) Operator
+
+The dot (`.`) operator in JQ is fundamental for navigating and extracting data from JSON objects:
+
+- `.` by itself refers to the entire input JSON object.
+- `.fieldname` accesses a field within the object (e.g., `.fields` gets the `fields` object).
+- Chaining fields (e.g., `.fields.subtasks`) traverses deeper into the hierarchy.
+- For arrays, `.fields.subtasks[]` iterates over each item in the array.
+- To extract a property from each item, use `.fields.subtasks[].key` (gets the `key` from every subtask).
+- Parentheses can be used for grouping and operations, such as concatenation: `(.metadata.labels.service + "-" + .metadata.labels.environment)`.
+
+This navigation allows you to flexibly extract, transform, and combine data from complex JSON structures.
 
 ## Exercise #2: Jira & GitHub Integration
 
@@ -882,3 +907,15 @@ python3 update_pr_count.py
 - `k8s-deploy.json` & `issue-response.json` - Source data files
 
 This submission demonstrates practical Port implementation skills, API integration expertise, and systematic problem-solving approach suitable for a Port solutions role.
+
+
+
+
+
+
+
+
+
+
+
+
