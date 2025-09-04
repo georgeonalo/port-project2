@@ -14,7 +14,7 @@ jq '.spec.replicas' k8s-deploy.json
 
 ![alt text](<Screenshot 2025-09-01 at 04.28.33.png>)
 
-**Explanation**: This pattern navigates to the `spec` object and extracts the `replicas` field, which contains the desired number of pod replicas for the deployment.
+**Explanation**: This pattern uses the dot (`.`) operator, which is fundamental in JQ for navigating JSON objects. Here, `.` refers to the root of the JSON, `.spec` accesses the `spec` object, and `.spec.replicas` extracts the `replicas` field. This allows you to flexibly extract, transform, and combine data from complex JSON structures.
 
 #### b. Deployment Strategy
 ```bash
@@ -24,7 +24,7 @@ jq '.spec.strategy.type' k8s-deploy.json
 
 ![alt text](<Screenshot 2025-09-01 at 04.29.03.png>)
 
-**Explanation**: This pattern accesses the deployment strategy configuration within the spec, specifically the `type` field that indicates whether the deployment uses RollingUpdate or Recreate strategy.
+**Explanation**: The dot operator is used to access nested fields: `.spec.strategy.type` means start at the root, go into `spec`, then `strategy`, then get the `type` field. Chaining fields with the dot operator lets you traverse deeper into the hierarchy and extract specific values.
 
 #### c. Service-Environment Label Concatenation
 ```bash
@@ -34,7 +34,7 @@ jq -r '(.metadata.labels.service + "-" + .metadata.labels.environment)' k8s-depl
 
 ![alt text](<Screenshot 2025-09-01 at 04.29.55.png>)
 
-**Explanation**: This pattern extracts two labels from the metadata section and concatenates them with a hyphen. The `-r` flag provides raw output without quotes. The parentheses ensure proper string concatenation order.
+**Explanation**: This pattern uses the dot operator to access two label fields inside the `metadata.labels` object. Parentheses group the two field accesses and the string concatenation operation. The `-r` flag outputs the result as raw text. This demonstrates how JQ can combine values from different parts of a JSON object using the dot operator and string operations.
 
 
 
@@ -68,11 +68,7 @@ jq '[.fields.subtasks[].key]' issue-response.json
 
 ![alt text](<Screenshot 2025-09-01 at 04.31.16.png>)
 
-**Explanation**: 
-- `.fields.subtasks[]` iterates through each subtask object in the subtasks array
-- `.key` extracts the issue identifier from each subtask
-- The outer `[]` brackets collect all the keys into a single array
-- This pattern handles any number of subtasks dynamically
+**Explanation**: This pattern uses the dot operator to traverse the JSON hierarchy: `.fields` accesses the `fields` object, `.fields.subtasks` accesses the `subtasks` array, and `.fields.subtasks[]` iterates over each subtask. `.fields.subtasks[].key` extracts the `key` property from each subtask. The outer brackets `[ ... ]` collect all keys into an array, handling any number of subtasks dynamically.
 
 #### Alternative Approaches:
 
@@ -80,27 +76,28 @@ jq '[.fields.subtasks[].key]' issue-response.json
 ```bash
 jq '.fields.subtasks | map(.key)' issue-response.json
 ```
+This uses the dot operator to access the array, then `map(.key)` to extract the `key` from each item.
 
 **Raw output (without array brackets):**
 ```bash
 jq -r '.fields.subtasks[].key' issue-response.json
 ```
+This outputs each key on a separate line, using the dot operator for navigation and `-r` for raw output.
 
 ---
 
 
-## Understanding the JQ Dot (.) Operator
 
-The dot (`.`) operator in JQ is fundamental for navigating and extracting data from JSON objects:
 
-- `.` by itself refers to the entire input JSON object.
-- `.fieldname` accesses a field within the object (e.g., `.fields` gets the `fields` object).
-- Chaining fields (e.g., `.fields.subtasks`) traverses deeper into the hierarchy.
-- For arrays, `.fields.subtasks[]` iterates over each item in the array.
-- To extract a property from each item, use `.fields.subtasks[].key` (gets the `key` from every subtask).
-- Parentheses can be used for grouping and operations, such as concatenation: `(.metadata.labels.service + "-" + .metadata.labels.environment)`.
 
-This navigation allows you to flexibly extract, transform, and combine data from complex JSON structures.
+## Exercise #1 Verification Steps
+
+1. Open your terminal in the project directory.
+2. Run each JQ command above against `k8s-deploy.json` and `issue-response.json`.
+3. Confirm the output matches the expected value and screenshot.
+4. If the output differs, check the JSON structure and field names for typos.
+
+---
 
 ## Exercise #2: Jira & GitHub Integration
 
@@ -134,21 +131,13 @@ This navigation allows you to flexibly extract, transform, and combine data from
 # Jira Issue → Repository relation
 relations:
   repository:
-    title: Repository
-    target: repository
-    required: false
     many: true  # Issue can relate to multiple repositories
 ```
-
-#### Component Mapping Strategy
-- Create Jira components matching GitHub repository names
 - Map components to repositories in Port integration
 - Support multiple component-to-repository relationships per issue
 
 #### GitHub Actions Workflow
 The provided `.github/workflows/deploy.yaml` implements the Jira integration:
-
-```yaml
 on:
     push:
         branches:
@@ -164,9 +153,6 @@ jobs:
         steps:
             - name: Run jira Integration
               uses: port-labs/ocean-sail@v1
-              with:
-                type: jira
-                port_client_id: ${{ secrets.PORT_CLIENT_ID }}
                 port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
                 port_base_url: "https://api.port.io"
                 config: |
@@ -198,7 +184,6 @@ First, we need to add a property to the repository blueprint to track the number
 {
   "identifier": "repository",
   "title": "Repository",
-  "icon": "Github",
   "schema": {
     "properties": {
       "name": {
@@ -224,6 +209,24 @@ First, we need to add a property to the repository blueprint to track the number
   }
 }
 ```
+**How PR Data is Sourced and Mapped:**
+- Port’s GitHub integration fetches repository metadata and open PR counts using the GitHub API.
+- The integration automatically updates the `open_prs_count` property on each repository entity in Port.
+- You can verify this by checking the entity details in Port after a sync.
+
+![Blueprint with open_prs_count](ADD_SCREENSHOT_BLUEPRINT_OPEN_PRS.png)
+
+---
+
+#### Step 1 Verification Steps
+1. Ensure Port’s GitHub integration is enabled and configured for your organization.
+2. Go to Port dashboard → Repositories.
+3. Select a repository entity and check the value of `open_prs_count`.
+    - _Add screenshot here of Port entity showing open PRs count._
+    - ![Repository entity open PRs](ADD_SCREENSHOT_ENTITY_OPEN_PRS.png)
+4. Confirm the value matches the number of open PRs in GitHub.
+5. If the value is incorrect, check the integration logs or script output for errors.
+
 
 #### Step 2: Create the Scorecard via API
 
@@ -327,6 +330,18 @@ else:
     print(response.text)
 ```
 
+---
+
+#### Step 2 Verification Steps
+1. Use the Port API or dashboard to create a scorecard that evaluates repositories based on the `open_prs_count` property. The scorecard logic should assign Gold, Silver, or Bronze status depending on the PR count.
+2. The scorecard uses the `open_prs_count` property on each repository entity.
+3. Gold: <5 PRs, Silver: <10 PRs, Bronze: <15 PRs.
+4. The scorecard is automatically updated as PR counts change via integration.
+5. Go to a repository entity in Port and click the "Scorecards" tab.
+6. Verify the scorecard status (Gold, Silver, Bronze) matches the open PR count.
+    - _Add screenshot here of scorecard results for a repository._
+    - ![Scorecard results](ADD_SCREENSHOT_SCORECARD_RESULTS.png)
+7. Test with repositories having different open PR counts to confirm the scorecard logic.
 ![alt text](<Screenshot 2025-09-01 at 06.28.34.png>)
 
 ![alt text](<Screenshot 2025-09-01 at 06.28.03.png>)
