@@ -138,6 +138,34 @@ relations:
 
 #### GitHub Actions Workflow
 The provided `.github/workflows/deploy.yaml` implements the Jira integration:
+
+---
+
+### Verification of Repository Sync and Jira-GitHub Mapping
+
+#### Step 1: Verify Repository Sync
+1. In Port, go to the "Repositories" section and confirm that all GitHub repositories are listed as entities.
+2. Open a repository entity and check for related Jira issues/components.
+    - _Add screenshot here of Port repository entity showing related Jira issues._
+    - ![Port Repository Sync](ADD_SCREENSHOT_PORT_REPO_SYNC.png)
+
+#### Step 2: Verify Jira-GitHub Mapping
+1. In Jira, ensure each component name matches a GitHub repository name (case-sensitive).
+2. In Port, open a Jira issue entity and confirm the "Repository" field is populated and links to the correct GitHub repository entity.
+3. In the repository entity, check the "Issues" or "Related Jira Issues" section for linked Jira issues.
+    - _Add screenshot here of Port dashboard showing Jira issue mapped to GitHub repository._
+    - ![Port Jira-GitHub Mapping](ADD_SCREENSHOT_PORT_JIRA_GITHUB_MAPPING.png)
+
+**Explanation & Evidence:**
+- The mapping works by matching the `component` field in Jira issues to the repository name in Port. When the integration runs, Port links the Jira issue to the corresponding GitHub repository entity.
+- In Port, the Jira issue entity displays a "Repository" field linked to the correct GitHub repository. The repository entity lists all related Jira issues, confirming the mapping is successful.
+
+#### Step 3: Test the Integration
+1. Create a new Jira issue and assign it to a component that matches a GitHub repository.
+2. Wait for the integration to sync (or trigger the workflow manually).
+3. In Port, verify that the new Jira issue appears under the correct repository entity.
+    - _Add screenshot here of Port showing new Jira issue under repository._
+    - ![Port New Jira Issue Synced](ADD_SCREENSHOT_PORT_NEW_JIRA_ISSUE.png)
 on:
     push:
         branches:
