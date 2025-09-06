@@ -115,8 +115,10 @@ This outputs each key on a separate line, using the dot operator for navigation 
 - Create new project: Software Development → Scrum → Company-managed
 - Access Components feature from left sidebar
 
-![alt text](<Screenshot 2025-09-01 at 04.59.21.png>)
-![alt text](<Screenshot 2025-09-01 at 04.53.49.png>)
+![alt text](<Screenshot 2025-09-05 at 18.17.36.png>)
+
+
+
 
 
 
@@ -146,15 +148,16 @@ The provided `.github/workflows/deploy.yaml` implements the Jira integration:
 #### Step 1: Verify Repository Sync
 1. In Port, go to the "Repositories" section and confirm that all GitHub repositories are listed as entities.
 2. Open a repository entity and check for related Jira issues/components.
-    - _Add screenshot here of Port repository entity showing related Jira issues._
-    - ![Port Repository Sync](ADD_SCREENSHOT_PORT_REPO_SYNC.png)
+    ![alt text](<Screenshot 2025-09-01 at 04.59.21.png>)
+   ![alt text](<Screenshot 2025-09-01 at 04.53.49.png>)
 
 #### Step 2: Verify Jira-GitHub Mapping
 1. In Jira, ensure each component name matches a GitHub repository name (case-sensitive).
 2. In Port, open a Jira issue entity and confirm the "Repository" field is populated and links to the correct GitHub repository entity.
 3. In the repository entity, check the "Issues" or "Related Jira Issues" section for linked Jira issues.
-    - _Add screenshot here of Port dashboard showing Jira issue mapped to GitHub repository._
-    - ![Port Jira-GitHub Mapping](ADD_SCREENSHOT_PORT_JIRA_GITHUB_MAPPING.png)
+   ![alt text](<Screenshot 2025-09-05 at 18.32.43.png>)
+
+   ![alt text](<Screenshot 2025-09-05 at 18.33.32.png>)
 
 **Explanation & Evidence:**
 - The mapping works by matching the `component` field in Jira issues to the repository name in Port. When the integration runs, Port links the Jira issue to the corresponding GitHub repository entity.
@@ -164,8 +167,8 @@ The provided `.github/workflows/deploy.yaml` implements the Jira integration:
 1. Create a new Jira issue and assign it to a component that matches a GitHub repository.
 2. Wait for the integration to sync (or trigger the workflow manually).
 3. In Port, verify that the new Jira issue appears under the correct repository entity.
-    - _Add screenshot here of Port showing new Jira issue under repository._
-    - ![Port New Jira Issue Synced](ADD_SCREENSHOT_PORT_NEW_JIRA_ISSUE.png)
+![alt text](<Screenshot 2025-09-05 at 18.32.43.png>)
+
 on:
     push:
         branches:
@@ -192,9 +195,6 @@ jobs:
 --
 
 
-![alt text](<Screenshot 2025-09-01 at 04.42.56.png>)
-
-![alt text](<Screenshot 2025-09-01 at 04.43.40.png>)
 
 ## Exercise #3: Repository Scorecard for Open Pull Requests
 
@@ -242,7 +242,9 @@ First, we need to add a property to the repository blueprint to track the number
 - The integration automatically updates the `open_prs_count` property on each repository entity in Port.
 - You can verify this by checking the entity details in Port after a sync.
 
-![Blueprint with open_prs_count](ADD_SCREENSHOT_BLUEPRINT_OPEN_PRS.png)
+[Blueprint with open_prs_count]
+
+![alt text](<Screenshot 2025-09-05 at 18.30.34.png>)
 
 ---
 
@@ -251,7 +253,11 @@ First, we need to add a property to the repository blueprint to track the number
 2. Go to Port dashboard → Repositories.
 3. Select a repository entity and check the value of `open_prs_count`.
     - _Add screenshot here of Port entity showing open PRs count._
-    - ![Repository entity open PRs](ADD_SCREENSHOT_ENTITY_OPEN_PRS.png)
+    - ![Repository entity open PRs]
+    ![alt text](<Screenshot 2025-09-05 at 18.59.02.png>)
+
+    ![alt text](<Screenshot 2025-09-05 at 19.00.04.png>)
+
 4. Confirm the value matches the number of open PRs in GitHub.
 5. If the value is incorrect, check the integration logs or script output for errors.
 
@@ -367,10 +373,12 @@ else:
 4. The scorecard is automatically updated as PR counts change via integration.
 5. Go to a repository entity in Port and click the "Scorecards" tab.
 6. Verify the scorecard status (Gold, Silver, Bronze) matches the open PR count.
-    - _Add screenshot here of scorecard results for a repository._
-    - ![Scorecard results](ADD_SCREENSHOT_SCORECARD_RESULTS.png)
+    ![alt text](<Screenshot 2025-09-06 at 01.09.09.png>)
+
+    ![alt text](<Screenshot 2025-09-06 at 01.14.02.png>)
+    ![alt text](<Screenshot 2025-09-01 at 06.28.34.png>)
 7. Test with repositories having different open PR counts to confirm the scorecard logic.
-![alt text](<Screenshot 2025-09-01 at 06.28.34.png>)
+
 
 ![alt text](<Screenshot 2025-09-01 at 06.28.03.png>)
 ![alt text](<Screenshot 2025-09-01 at 06.27.40.png>)
@@ -379,16 +387,43 @@ else:
 
 # Exercise #4: Troubleshooting Self-Service Actions with GitHub Workflows
 
+**Problem Recap:**
+Customer’s self-service action in Port stays “IN PROGRESS” and does not trigger the GitHub workflow. This typically means the workflow was not triggered, or Port did not receive a status update from GitHub.
 
-![alt text](<Screenshot 2025-09-01 at 06.40.45.png>)
+## Step-by-Step Debugging & Evidence
 
-![alt text](<Screenshot 2025-09-01 at 06.41.06.png>)
+### Step 1: Check Port Action Log
+When a self-service action is triggered in Port, the status should update based on the workflow execution. If it remains “IN PROGRESS,” it may indicate a problem with the workflow trigger or status reporting.
 
-![alt text](<Screenshot 2025-09-01 at 06.41.22.png>)
+- **What to check:** Go to the entity in Port, open “Action Runs” or “Audit Log,” and find the relevant action.
+- **Expected outcome:** The action should show a completed/succeded or failed status, not “IN PROGRESS.”
+![alt text](<Screenshot 2025-09-06 at 01.23.47.png>)
+- **Reasoning:** If the action is stuck, it means Port did not receive a status update from GitHub, which could be due to a missing workflow_dispatch, incorrect repo name, or missing secrets.
 
-**Problem**: Self-service action triggers a GitHub workflow but stays in "IN PROGRESS" status indefinitely, and the workflow is not being triggered.
+### Step 2: Verify GitHub Workflow Run
+If the workflow is not triggered, check the GitHub Actions tab for any runs corresponding to the Port action.
 
+- **What to check:** Go to GitHub → Actions tab, look for workflow runs at the time the action was triggered.
+- **Expected outcome:** There should be a workflow run; if not, the trigger configuration may be wrong.
+![alt text](<Screenshot 2025-09-06 at 01.17.06.png>)
+- **Reasoning:** No run means the workflow_dispatch trigger is missing or the workflow file is misnamed.
 
+### Step 3: Check Workflow File and Secrets
+- **What to check:** Open the workflow file in `.github/workflows/`, confirm `workflow_dispatch` is present, and check that required secrets are configured.
+- **Expected outcome:** The workflow file should have the correct trigger and secrets.
+![alt text](<Screenshot 2025-09-06 at 01.18.46.png>)
+![alt text](<Screenshot 2025-09-06 at 01.19.16.png>)
+- **Reasoning:** Missing triggers or secrets prevent Port from triggering and reporting status.
+
+### Step 4: Reproduce and Resolve
+- **What to check:** Intentionally misconfigure a workflow or secret, trigger the action, and observe the result. Then fix the configuration and confirm the action completes.
+- **Expected outcome:** After fixing, the action should complete and the workflow should run.
+
+- **Reasoning:** This demonstrates understanding of the error and the steps needed to resolve it.
+
+### References
+- [Port Docs: Self-Service Actions](https://docs.getport.io/docs/self-service-actions)
+- [Port Docs: GitHub Actions Integration](https://docs.getport.io/docs/integrations/github-actions)
 
 
 
