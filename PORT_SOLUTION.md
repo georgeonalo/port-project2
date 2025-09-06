@@ -202,9 +202,7 @@ jobs:
 
 ### Solution:
 
-#### Step 1: Add Open PRs Property to Repository Blueprint
 
-![alt text](<Screenshot 2025-09-01 at 04.59.21-1.png>)
 
 First, we need to add a property to the repository blueprint to track the number of open pull requests:
 
@@ -252,8 +250,7 @@ First, we need to add a property to the repository blueprint to track the number
 1. Ensure Port’s GitHub integration is enabled and configured for your organization.
 2. Go to Port dashboard → Repositories.
 3. Select a repository entity and check the value of `open_prs_count`.
-    - _Add screenshot here of Port entity showing open PRs count._
-    - ![Repository entity open PRs]
+   
     ![alt text](<Screenshot 2025-09-05 at 18.59.02.png>)
 
     ![alt text](<Screenshot 2025-09-05 at 19.00.04.png>)
